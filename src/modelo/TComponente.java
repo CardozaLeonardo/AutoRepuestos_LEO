@@ -123,6 +123,33 @@ public class TComponente
         }
     }
    
+   public boolean verificarStock(int cant, int id)
+   {
+       try {
+            st = this.miConex.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            rs = st.executeQuery("SELECT stock FROM componente WHERE componente_ID = " + id);
+            if(!rs.next())
+            {
+                return false;
+            }else{
+                int stock = rs.getInt("stock");
+                
+                if(stock < cant)
+                {
+                    return false;
+                }
+            }
+            
+        } catch (SQLException ex) {
+            //Logger.getLogger(TUsuario.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+        
+        return true;
+   }
+   
+   
+   
    public ArrayList<TFabricante> cargarComboBFab(){
         ArrayList<TFabricante> lista = new ArrayList<>();
         lista = fabricante.cargarListaFabricante();
@@ -163,7 +190,7 @@ public class TComponente
                 tabla.addRow(filas);
             }
         } catch (SQLException ex) {
-            //Logger.getLogger(TCargo.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TComponente.class.getName()).log(Level.SEVERE, null, ex);
         }
         return tabla;
     }
@@ -224,16 +251,24 @@ public class TComponente
         this.stock = stock;
     }
    
-  public void actualizarStock(int ns, int id)
+  public boolean actualizarStock(int cant, int id)
   {
-       try {
-            st = this.miConex.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            rs = st.executeQuery("Update Componente set stock += " + ns + " where componente_ID = " + id);
-            rs.next();
-        } catch (SQLException ex) {
-            
-        } 
+       
+      if(verificarStock(cant, id)){
+        try {
+             st = this.miConex.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+             rs = st.executeQuery("Update Componente set stock += " + cant + " where componente_ID = " + id);
+             rs.next();
+         } catch (SQLException ex) {
+
+         } 
+        
+      }else{
+          JOptionPane.showMessageDialog(null, "No se cuenta con suficente Stock", "Stock insuficiente", JOptionPane.WARNING_MESSAGE);
+          return false;
+      }
      
+      return true;
   }
    
 }

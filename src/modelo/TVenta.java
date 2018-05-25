@@ -147,8 +147,10 @@ public class TVenta
         return componente.cargarComboBCategoria();
     }
    
-    public void actualizarStock(int ns, int id)
+    public boolean actualizarStock(int cant, int id)
     {
-        componente.actualizarStock(ns, id);
+        return componente.actualizarStock(cant, id);
     }
+    
+    
 }

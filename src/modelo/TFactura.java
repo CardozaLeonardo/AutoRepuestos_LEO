@@ -167,12 +167,19 @@ public class TFactura {
     public void cargarID(){
         try {
             st = this.miConex.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            rs = st.executeQuery("SELECT max(factura_ID) as last FROM  Factura");
+            rs = st.executeQuery("SELECT max(factura_ID) + 1 as id from Factura");
             rs.next();
-            int id = rs.getInt("last");
+            
+            int id = rs.getInt("id");
             factura_ID = id;
+            
+            if(factura_ID == 0){
+                factura_ID = 1;
+            }            
+            
         } catch (SQLException ex) {
             Logger.getLogger(TCategoriaComponente.class.getName()).log(Level.SEVERE, null, ex);
+            factura_ID = 1;
         }
     }
     
@@ -181,9 +188,9 @@ public class TFactura {
        ventas.guardar(facturaID, componenteID, cantidad);
    }
    
-   public void actualizarStock(int ns, int id)
+   public boolean actualizarStock(int ns, int id)
    {
-       ventas.actualizarStock(ns, id);
+       return ventas.actualizarStock(ns, id);
    }
    
    public void eliminarTV(int idFactura)

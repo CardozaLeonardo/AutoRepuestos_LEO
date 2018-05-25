@@ -548,10 +548,16 @@ public class MenuPrincipal extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jPanel1MouseDragged
 
     private void panelFacturarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelFacturarMouseClicked
-        FacturacionForm ff = new FacturacionForm(dp);
-        dp.removeAll();
-        dp.add(ff);
-        ff.setVisible(true);
+        FacturacionForm ff;
+        try {
+            ff = new FacturacionForm(dp);
+            dp.removeAll();
+            dp.add(ff);
+            ff.setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(MenuPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }//GEN-LAST:event_panelFacturarMouseClicked
 
     private void btnSalirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSalirMouseClicked
