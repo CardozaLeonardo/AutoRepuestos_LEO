@@ -337,11 +337,15 @@ public class InventarioForm extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_panelCatMouseExited
 
     private void backBotonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_backBotonMouseClicked
-        //this.dispose();
-        MenuPrincipal mp = new MenuPrincipal(dp);
-        //dp.removeAll();
-        dp.add(mp);
-        mp.setVisible(true);
+        try {
+            //this.dispose();
+            MenuPrincipal mp = new MenuPrincipal(dp);
+            //dp.removeAll();
+            dp.add(mp);
+            mp.setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(InventarioForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_backBotonMouseClicked
 
     private void panelFabriMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelFabriMouseClicked

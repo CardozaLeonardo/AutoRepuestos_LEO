@@ -160,6 +160,39 @@ public class TEmpleado {
         }
     }
     
+    public String obtenerNombreEmpleadoIniciado()
+    {
+        try {
+            st = this.miConex.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            rs = st.executeQuery("SELECT concat(e.nombres,' ',' ',e.apellidos) as FullName FROM Empleado e" +
+            " INNER JOIN Usuario u ON u.empleado_ID = e.empleado_ID WHERE u.estado = 'Iniciado'");
+            rs.next();
+            
+            String name = rs.getString("FullName");
+            return name;
+        } catch (SQLException ex) {
+            Logger.getLogger(TEmpleado.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return "Unknown";
+    }
+    
+    public void cargarID()
+    {
+           
+        try{
+           st = this.miConex.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+           rs = st.executeQuery("SELECT e.empleado_ID FROM Empleado e INNER JOIN Usuario u ON u.empleado_ID = e.empleado_ID "
+           + "WHERE u.estado = 'Iniciado'");
+           rs.next();
+           
+           empleadoID = rs.getInt("e.empleado_ID");
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(TEmpleado.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public void actualizarEstado() throws SQLException{
         empleadoID = rs.getInt(1);
         cedula = rs.getString(2);

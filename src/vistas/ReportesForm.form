@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JInternalFrameFormInfo">
+  <NonVisualComponents>
+    <Component class="javax.swing.ButtonGroup" name="buttonGroup1">
+    </Component>
+  </NonVisualComponents>
   <Properties>
     <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
       <Border info="null"/>
@@ -44,16 +48,15 @@
                       <Component id="btnGenerarReporte" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace pref="283" max="32767" attributes="0"/>
+              <EmptySpace pref="125" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
               <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="78" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="84" max="-2" attributes="0"/>
               <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="62" max="-2" attributes="0"/>
               <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
@@ -168,67 +171,50 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="53" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="52" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="cbProductoMasVendido" min="-2" max="-2" attributes="0"/>
-                      <Component id="cbComparacionMes" min="-2" max="-2" attributes="0"/>
-                      <Component id="cbTotalRecaudado" min="-2" max="-2" attributes="0"/>
-                      <Component id="cbEmpleadoMasGanancias" min="-2" max="-2" attributes="0"/>
-                      <Component id="cbEmpleadoMasVentas" min="-2" max="-2" attributes="0"/>
+                      <Component id="rbProductosMasV" min="-2" max="-2" attributes="0"/>
+                      <Component id="rbEmpleadoMIG" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="241" max="32767" attributes="0"/>
+                  <EmptySpace pref="329" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
-                  <Component id="cbEmpleadoMasVentas" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Component id="cbEmpleadoMasGanancias" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
-                  <Component id="cbTotalRecaudado" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
+                  <Component id="rbEmpleadoMIG" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="cbComparacionMes" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="cbProductoMasVendido" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="92" max="32767" attributes="0"/>
+                  <Component id="rbProductosMasV" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace pref="216" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JCheckBox" name="cbEmpleadoMasVentas">
+        <Component class="javax.swing.JRadioButton" name="rbEmpleadoMIG">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Empleado con m&#xe1;s ventas"/>
+            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+              <ComponentRef name="buttonGroup1"/>
+            </Property>
+            <Property name="selected" type="boolean" value="true"/>
+            <Property name="text" type="java.lang.String" value="Empleados con m&#xe1;s ingresos generados"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JCheckBox" name="cbEmpleadoMasGanancias">
+        <Component class="javax.swing.JRadioButton" name="rbProductosMasV">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Empleado con m&#xe1;s ganancias"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JCheckBox" name="cbTotalRecaudado">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Total recaudado"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JCheckBox" name="cbComparacionMes">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Comparaci&#xf3;n mes anterior"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JCheckBox" name="cbProductoMasVendido">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Producto m&#xe1;s vendido"/>
+            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+              <ComponentRef name="buttonGroup1"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Productos m&#xe1;s vendidos en el &#xfa;ltimo mes"/>
           </Properties>
         </Component>
       </SubComponents>
     </Container>
     <Component class="javax.swing.JLabel" name="jLabel4">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Informaci&#xf3;n del &#xfa;ltimo mes"/>
+        <Property name="text" type="java.lang.String" value="Escoja el tipo de reporte que desea: "/>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="btnGenerarReporte">
@@ -241,6 +227,9 @@
           <Color id="Cursor de Mano"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnGenerarReporteMouseClicked"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

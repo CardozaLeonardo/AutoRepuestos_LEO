@@ -5,6 +5,9 @@
  */
 package vistas;
 
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 
 /**
@@ -16,7 +19,7 @@ public class Principal extends javax.swing.JFrame {
     /**
      * Creates new form Principal
      */
-    public Principal() {
+    public Principal() throws SQLException {
         initComponents();
         setIcon();
         loadForm();
@@ -29,7 +32,7 @@ public class Principal extends javax.swing.JFrame {
         this.setIconImage(img.getImage());
     }
     
-    public void loadForm()
+    public void loadForm() throws SQLException
     {
         MenuPrincipal mp  = new MenuPrincipal(jDesktopPane1);
         jDesktopPane1.add(mp);
@@ -108,7 +111,11 @@ public class Principal extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Principal().setVisible(true);
+                try {
+                    new Principal().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }

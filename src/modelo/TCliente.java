@@ -219,6 +219,25 @@ public class TCliente {
         return tabla;
     }
       
+    public ArrayList<String> obtenerListaCuentas(int empleado_ID)
+    {
+        ArrayList <String> cuentas = new ArrayList();
+        
+        try {
+            st = this.miConex.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            rs = st.executeQuery("SELECT * FROM Usuario WHERE empleado_ID = " + empleado_ID);
+            
+            while(rs.next())
+            {
+                cuentas.add(rs.getString("usuario"));
+            }
+        } catch (SQLException ex) {
+            //Logger.getLogger(TCliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return cuentas;
+    }
+      
       
       /////////////////////////////////////////////////////////7
 

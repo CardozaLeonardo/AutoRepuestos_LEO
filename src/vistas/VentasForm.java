@@ -20,12 +20,14 @@ public class VentasForm extends javax.swing.JDialog {
      */
     private TVenta ventas;
     private int factura_ID;
-    public VentasForm(int factura_ID, boolean modal) throws SQLException {
+    public VentasForm(int factura_ID, boolean modal, java.awt.Frame parent) throws SQLException {
         
+        super(parent,modal);
         initComponents();
         ventas = new TVenta();
         this.factura_ID = factura_ID;
         facturaIDL.setText("Factura No: " + this.factura_ID);
+        cargarTablaVentas();
     }
     
     

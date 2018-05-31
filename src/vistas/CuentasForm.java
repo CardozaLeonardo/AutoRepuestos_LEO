@@ -6,8 +6,12 @@
 package vistas;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JDesktopPane;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
+import modelo.TEmpleado;
 import modelo.TUsuario;
 
 /**
@@ -18,8 +22,10 @@ public class CuentasForm extends javax.swing.JInternalFrame {
     
 
     private TUsuario user;
+    private TEmpleado emp;
     int totalregistros;
     private String cadenaBusqueda;
+    private ArrayList <String> cuen;
     /**
      * Creates new form Cuenta
      */
@@ -29,28 +35,33 @@ public class CuentasForm extends javax.swing.JInternalFrame {
         initComponents();
         ((BasicInternalFrameUI)this.getUI()).setNorthPane(null);
         user = new TUsuario();
-        cargarTabla();
+        emp = new TEmpleado();
+        cargarLista();
     }
     
-    public void cargarTabla()
+    public void cargarLista()
     {
+        listaCuentas.removeAll();
         
-        tablaUsuarios.setModel(user.cargarTabla());
+        emp.cargarID();
+        cuen = user.obtenerListaCuentas(emp.getEmpleadoID());
+        String [] strings = new String[cuen.size()];
+        
+        int i = 0;
+        for(String sr: cuen)
+        {
+            strings[i] = sr;
+            i++;
+        }
+        
+        listaCuentas.setModel(new javax.swing.AbstractListModel<String>() {
+            
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
     }
     
-    private void mostrarDatos(){
-        this.txtAgregarCamp1.setText(String.valueOf(user.getNombreUsuario()));
-        this.txtModificarCampo1.setText(String.valueOf(user.getNom()));
-    }
-
-    private void limpiarControles()
-    {
-        this.txtAgregarCamp1.setText("");
-        this.txtAgregarCampo2.setText("");
-        this.txtModificarCampo1.setText("");
-        this.txtModificarCampo2.setText("");
-        
-    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -60,96 +71,22 @@ public class CuentasForm extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        tablaUsuarios = new javax.swing.JTable();
-        btnModificar = new javax.swing.JButton();
-        btnAgregar = new javax.swing.JButton();
-        btnEliminar = new javax.swing.JButton();
-        txtAgregarCamp1 = new javax.swing.JTextField();
-        txtAgregarCampo2 = new javax.swing.JTextField();
-        btnGuardarAgregar = new javax.swing.JButton();
-        btnCancelarAgregar = new javax.swing.JButton();
-        txtModificarCampo2 = new javax.swing.JTextField();
-        txtModificarCampo1 = new javax.swing.JTextField();
-        btnGuardarModificar = new javax.swing.JButton();
-        btnCancelarModificar = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         btnAtras = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        listaCuentas = new javax.swing.JList<>();
+        jPanel1 = new javax.swing.JPanel();
+        txtUsuario = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        txtPass = new javax.swing.JPasswordField();
+        jLabel4 = new javax.swing.JLabel();
+        btAgregar = new javax.swing.JButton();
+        btEliminar = new javax.swing.JButton();
 
         setBorder(null);
         setPreferredSize(new java.awt.Dimension(1000, 670));
-
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Cuentas de:"));
-
-        tablaUsuarios.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-
-            }
-        ));
-        jScrollPane2.setViewportView(tablaUsuarios);
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(0, 6, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 11, Short.MAX_VALUE))
-        );
-
-        btnModificar.setForeground(new java.awt.Color(0, 0, 0));
-        btnModificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/Edit File_30px.png"))); // NOI18N
-        btnModificar.setText("Modificar");
-        btnModificar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnModificar.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnModificarMouseClicked(evt);
-            }
-        });
-
-        btnAgregar.setForeground(new java.awt.Color(0, 0, 0));
-        btnAgregar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/Plus_30px.png"))); // NOI18N
-        btnAgregar.setText("Agregar");
-        btnAgregar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnAgregar.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnAgregarMouseClicked(evt);
-            }
-        });
-
-        btnEliminar.setForeground(new java.awt.Color(0, 0, 0));
-        btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/Delete_30px.png"))); // NOI18N
-        btnEliminar.setText("Eliminar");
-        btnEliminar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnEliminar.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnEliminarMouseClicked(evt);
-            }
-        });
-
-        btnGuardarAgregar.setText("Guardar");
-        btnGuardarAgregar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-
-        btnCancelarAgregar.setText("Cancelar");
-        btnCancelarAgregar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-
-        btnGuardarModificar.setText("Guardar");
-        btnGuardarModificar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-
-        btnCancelarModificar.setText("Cancelar");
-        btnCancelarModificar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         jPanel2.setBackground(new java.awt.Color(69, 126, 170));
 
@@ -177,178 +114,175 @@ public class CuentasForm extends javax.swing.JInternalFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(17, 17, 17)
                 .addComponent(btnAtras)
-                .addGap(389, 389, 389)
+                .addGap(411, 411, 411)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel2)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(32, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(btnAtras))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(15, 15, 15)))
-                .addGap(29, 29, 29))
+                    .addComponent(btnAtras)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2))
+                .addContainerGap(33, Short.MAX_VALUE))
+        );
+
+        listaCuentas.setBorder(javax.swing.BorderFactory.createTitledBorder("Cuentas actuales"));
+        listaCuentas.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane1.setViewportView(listaCuentas);
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Opciones"));
+
+        jLabel3.setText("Usuario: ");
+
+        jLabel4.setText("Contraseña: ");
+
+        btAgregar.setForeground(new java.awt.Color(0, 0, 0));
+        btAgregar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Inventario/icons8_Plus_Math_25px.png"))); // NOI18N
+        btAgregar.setText("Agregar");
+        btAgregar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btAgregar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btAgregarMouseClicked(evt);
+            }
+        });
+
+        btEliminar.setForeground(new java.awt.Color(0, 0, 0));
+        btEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Inventario/icons8_Trash_Can_25px_1.png"))); // NOI18N
+        btEliminar.setText("Eliminar");
+        btEliminar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btEliminar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btEliminarMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtPass, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
+                            .addComponent(txtUsuario)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(91, 91, 91)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btEliminar)
+                            .addComponent(btAgregar))))
+                .addContainerGap(29, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(52, 52, 52)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel3)
+                    .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(33, 33, 33)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
+                .addGap(55, 55, 55)
+                .addComponent(btAgregar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btEliminar)
+                .addContainerGap(48, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(43, 43, 43)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnCancelarAgregar)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnAgregar)
-                                .addGap(34, 34, 34)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtAgregarCampo2, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtAgregarCamp1, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                            .addComponent(btnGuardarModificar)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(btnCancelarModificar))
-                                        .addComponent(txtModificarCampo2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                        .addGap(0, 152, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnModificar)
-                                .addGap(27, 27, 27)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnGuardarAgregar)
-                                    .addComponent(txtModificarCampo1, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(btnEliminar))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(77, 77, 77)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(55, 55, 55)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(319, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(11, 11, 11)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnAgregar)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(txtAgregarCamp1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtAgregarCampo2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnCancelarAgregar)
-                            .addComponent(btnGuardarAgregar))
-                        .addGap(40, 40, 40)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(txtModificarCampo1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtModificarCampo2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(btnModificar))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnGuardarModificar)
-                            .addComponent(btnCancelarModificar))
-                        .addGap(48, 48, 48)
-                        .addComponent(btnEliminar)))
-                .addContainerGap(101, Short.MAX_VALUE))
+                .addGap(82, 82, 82)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1))
+                .addGap(0, 126, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnAgregarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAgregarMouseClicked
-        // TODO add your handling code here:
-        this.btnAgregar.setEnabled(true);
-        this.txtAgregarCamp1.setVisible(true);
-        this.txtAgregarCampo2.setVisible(true);
-        this.btnGuardarAgregar.setVisible(true);
-        this.btnCancelarAgregar.setVisible(true);
-        
-        this.btnModificar.setEnabled(false);
-        this.txtModificarCampo2.setVisible(false);
-        this.txtModificarCampo1.setVisible(false);
-        this.btnGuardarModificar.setVisible(false);
-        this.btnCancelarModificar.setVisible(false);
-        this.btnModificar.setEnabled(false);
-        this.btnEliminar.setEnabled(false);
-        
-    }//GEN-LAST:event_btnAgregarMouseClicked
-
-    private void btnModificarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnModificarMouseClicked
-        // TODO add your handling code here:
-        this.btnAgregar.setEnabled(false);
-        this.btnModificar.setEnabled(true);
-        this.txtAgregarCamp1.setVisible(false);
-        this.txtAgregarCampo2.setVisible(false);
-        this.btnGuardarAgregar.setVisible(false);
-        this.btnCancelarAgregar.setVisible(false);
-        this.txtModificarCampo1.setVisible(true);
-        this.txtModificarCampo2.setVisible(true);
-        this.btnGuardarModificar.setVisible(true);
-        this.btnCancelarModificar.setVisible(true);
-        this.btnEliminar.setEnabled(false);
-    }//GEN-LAST:event_btnModificarMouseClicked
-
     private void btnAtrasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAtrasMouseClicked
-        MenuPrincipal mp = new MenuPrincipal(dp);
-        dp.removeAll();
-        dp.add(mp);
-        mp.setVisible(true);
+        try {
+            MenuPrincipal mp = new MenuPrincipal(dp);
+            dp.removeAll();
+            dp.add(mp);
+            mp.setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(CuentasForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnAtrasMouseClicked
 
-    private void btnEliminarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarMouseClicked
-        // TODO add your handling code here:
-        this.btnEliminar.setEnabled(true);
-        this.btnAgregar.setEnabled(false);
-        this.txtAgregarCamp1.setVisible(false);
-        this.txtAgregarCampo2.setVisible(false);
-        this.btnGuardarAgregar.setVisible(false);
-        this.btnCancelarAgregar.setVisible(false);
-        this.btnModificar.setEnabled(false);
-        this.txtModificarCampo2.setVisible(false);
-        this.txtModificarCampo1.setVisible(false);
-        this.btnGuardarModificar.setVisible(false);
-        this.btnCancelarModificar.setVisible(false);
-        this.btnModificar.setEnabled(false);
-    }//GEN-LAST:event_btnEliminarMouseClicked
+    private void btAgregarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btAgregarMouseClicked
+        
+        
+        if(!txtUsuario.getText().equals("") && !txtPass.getText().equals(""))
+        {
+            if(user.verificarUsuarioExistente(txtUsuario.getText()))
+            {
+                user.guardar(txtUsuario.getText(), txtPass.getText(), emp.getEmpleadoID());
+                cargarLista();
+            }
+            
+        } 
+    }//GEN-LAST:event_btAgregarMouseClicked
+
+    private void btEliminarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btEliminarMouseClicked
+        int index = listaCuentas.getSelectedIndex();
+        
+        if(index != -1 && cuen.size() > 1) // cuen.size() > 1 para evitar el empleado actual se quede sin cuentas.
+        {
+            user.eliminar(listaCuentas.getSelectedValue());
+            cargarLista();
+        }
+    }//GEN-LAST:event_btEliminarMouseClicked
 
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAgregar;
+    private javax.swing.JButton btAgregar;
+    private javax.swing.JButton btEliminar;
     private javax.swing.JButton btnAtras;
-    private javax.swing.JButton btnCancelarAgregar;
-    private javax.swing.JButton btnCancelarModificar;
-    private javax.swing.JButton btnEliminar;
-    private javax.swing.JButton btnGuardarAgregar;
-    private javax.swing.JButton btnGuardarModificar;
-    private javax.swing.JButton btnModificar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable tablaUsuarios;
-    private javax.swing.JTextField txtAgregarCamp1;
-    private javax.swing.JTextField txtAgregarCampo2;
-    private javax.swing.JTextField txtModificarCampo1;
-    private javax.swing.JTextField txtModificarCampo2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JList<String> listaCuentas;
+    private javax.swing.JPasswordField txtPass;
+    private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
 }

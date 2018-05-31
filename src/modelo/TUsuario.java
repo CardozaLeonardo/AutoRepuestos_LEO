@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -47,42 +48,102 @@ public class TUsuario {
          
     }
     
-    public void guardar(String nombre, String apellido){
+    public void guardar(String usuario, String clave, int empleado_ID){
         PreparedStatement sp;
         try {
-            sp = this.miConex.prepareStatement("insert into Usuario(usuario, usuario_ID) values (?,?)");
-            sp.setString(1,nombreUsuario);
-            sp.setString(2,contraseña);
+            sp = this.miConex.prepareStatement("Insert into Usuario(usuario, clave,estado, empleado_ID) values (?,?,?,?)");
+            sp.setString(1,usuario);
+            sp.setString(2,clave);
+            sp.setString(3,"Noiniciado");
+            sp.setInt(4, empleado_ID);
             
             sp.execute();
             JOptionPane.showMessageDialog(null,
                         "¡Usuario guardado existosamente!",
                         "Nuevo Registro",
                         JOptionPane.INFORMATION_MESSAGE);
-            this.actualizar();
-            rs.last();
-            this.actualizarEstado();
+            //this.actualizar();
+            //rs.last();
+            //this.actualizarEstado();
         } catch (SQLException ex) {
             Logger.getLogger(TCliente.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
-    public void eliminar(int id){
+    public void guardar(String usuario, String clave){
+        PreparedStatement sp;
+        String sq = "(SELECT max(empleado_ID) FROM Empleado)";
+        try {
+            sp = this.miConex.prepareStatement("Insert into Usuario(usuario, clave,estado, empleado_ID) values (?,?,?," + sq +")");
+            sp.setString(1,usuario);
+            sp.setString(2,clave);
+            sp.setString(3,"Noiniciado");
+            //sp.setInt(4, empleado_ID);
+            
+            sp.execute();
+            JOptionPane.showMessageDialog(null,
+                        "¡Usuario guardado existosamente!",
+                        "Nuevo Registro",
+                        JOptionPane.INFORMATION_MESSAGE);
+            //this.actualizar();
+            //rs.last();
+            //this.actualizarEstado();
+        } catch (SQLException ex) {
+            Logger.getLogger(TCliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public boolean verificarUsuarioExistente(String usuario)
+    {
+        try {
+            st = this.miConex.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            rs = st.executeQuery("SELECT * FROM Usuario WHERE usuario = '" + usuario + "'");
+            if(!rs.next())
+            {
+               return true;
+            }
+        } catch (SQLException ex) {
+            //Logger.getLogger(TUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+       JOptionPane.showMessageDialog(null,"Ya existe una cuenta con este nombre de usuario", "Usuario Existente", JOptionPane.INFORMATION_MESSAGE);
+       return false;
+    }
+    
+    public void eliminar(String username){
         try {
             PreparedStatement sp;
-            sp=this.miConex.prepareStatement("Delete from Usuario Where usuario_ID=?");
-            sp.setInt(1,id);
+            sp=this.miConex.prepareStatement("Delete from Usuario Where usuario =?");
+            sp.setString(1,username);
             sp.execute();
             JOptionPane.showMessageDialog(null,
                         "¡Cargo eliminado existosamente!",
                         "Eliminar Registro",
                         JOptionPane.INFORMATION_MESSAGE);
-            this.actualizar();
-            rs.last();
-            this.actualizarEstado();
+            //this.actualizar();
+            //rs.last();
+            //this.actualizarEstado();
             } catch (SQLException ex) {
                 Logger.getLogger(TUsuario.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public ArrayList<String> obtenerListaCuentas(int empleado_ID)
+    {
+        ArrayList <String> cuentas = new ArrayList();
+        
+        try {
+            st = this.miConex.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            rs = st.executeQuery("SELECT * FROM Usuario WHERE empleado_ID = " + empleado_ID);
+            while(rs.next())
+            {
+                cuentas.add(rs.getString("usuario"));
+            }
+        } catch (SQLException ex) {
+            //Logger.getLogger(TUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return cuentas;
     }
     
      public void modificar(int id, String nom, String ap, String ced){
@@ -227,10 +288,19 @@ public class TUsuario {
             if(!rs.next())
             {
                 return false;
+            }else{
+               PreparedStatement sp;
+               sp=this.miConex.prepareStatement("UPDATE Usuario set estado = 'Noiniciado'");
+               sp.execute();
+               sp=this.miConex.prepareStatement("UPDATE Usuario set estado = 'Iniciado' WHERE usuario =? and clave =?");
+               sp.setString(1, user);
+               sp.setString(2, pass);
+               sp.execute();
+               
             }
             
         } catch (SQLException ex) {
-            //Logger.getLogger(TUsuario.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TUsuario.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
         

@@ -52,7 +52,7 @@ public class TVenta
             rs.last();
             this.actualizarEstado();*/
         } catch (SQLException ex) {
-            //Logger.getLogger(TCategoriaComponente.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(TVenta.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null,
                         "¡Ingrese adecuadamente los datos!","Error al guardar",JOptionPane.ERROR_MESSAGE);
         }
@@ -150,6 +150,11 @@ public class TVenta
     public boolean actualizarStock(int cant, int id)
     {
         return componente.actualizarStock(cant, id);
+    }
+    
+    public boolean verificarStock(int cant, int id)
+    {
+        return componente.verificarStock(cant, id);
     }
     
     

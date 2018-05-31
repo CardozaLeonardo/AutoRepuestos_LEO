@@ -5,8 +5,19 @@
  */
 package vistas;
 
+import java.net.URL;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JDesktopPane;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
+import modelo.Conexion;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -18,6 +29,7 @@ public class ReportesForm extends javax.swing.JInternalFrame {
      * Creates new form ReportesForm
      */
     JDesktopPane dp;
+    private Conexion con;
     public ReportesForm(JDesktopPane dp) {
         this.dp = dp;
         initComponents();
@@ -33,17 +45,15 @@ public class ReportesForm extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         btnAtras = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        cbEmpleadoMasVentas = new javax.swing.JCheckBox();
-        cbEmpleadoMasGanancias = new javax.swing.JCheckBox();
-        cbTotalRecaudado = new javax.swing.JCheckBox();
-        cbComparacionMes = new javax.swing.JCheckBox();
-        cbProductoMasVendido = new javax.swing.JCheckBox();
+        rbEmpleadoMIG = new javax.swing.JRadioButton();
+        rbProductosMasV = new javax.swing.JRadioButton();
         jLabel4 = new javax.swing.JLabel();
         btnGenerarReporte = new javax.swing.JButton();
 
@@ -99,51 +109,44 @@ public class ReportesForm extends javax.swing.JInternalFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153), 2));
 
-        cbEmpleadoMasVentas.setText("Empleado con más ventas");
+        buttonGroup1.add(rbEmpleadoMIG);
+        rbEmpleadoMIG.setSelected(true);
+        rbEmpleadoMIG.setText("Empleados con más ingresos generados");
 
-        cbEmpleadoMasGanancias.setText("Empleado con más ganancias");
-
-        cbTotalRecaudado.setText("Total recaudado");
-
-        cbComparacionMes.setText("Comparación mes anterior");
-
-        cbProductoMasVendido.setText("Producto más vendido");
+        buttonGroup1.add(rbProductosMasV);
+        rbProductosMasV.setText("Productos más vendidos en el último mes");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(53, 53, 53)
+                .addGap(52, 52, 52)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cbProductoMasVendido)
-                    .addComponent(cbComparacionMes)
-                    .addComponent(cbTotalRecaudado)
-                    .addComponent(cbEmpleadoMasGanancias)
-                    .addComponent(cbEmpleadoMasVentas))
-                .addContainerGap(241, Short.MAX_VALUE))
+                    .addComponent(rbProductosMasV)
+                    .addComponent(rbEmpleadoMIG))
+                .addContainerGap(329, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(32, 32, 32)
-                .addComponent(cbEmpleadoMasVentas)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(cbEmpleadoMasGanancias)
+                .addGap(20, 20, 20)
+                .addComponent(rbEmpleadoMIG)
                 .addGap(18, 18, 18)
-                .addComponent(cbTotalRecaudado)
-                .addGap(18, 18, 18)
-                .addComponent(cbComparacionMes)
-                .addGap(18, 18, 18)
-                .addComponent(cbProductoMasVendido)
-                .addContainerGap(92, Short.MAX_VALUE))
+                .addComponent(rbProductosMasV)
+                .addContainerGap(216, Short.MAX_VALUE))
         );
 
-        jLabel4.setText("Información del último mes");
+        jLabel4.setText("Escoja el tipo de reporte que desea: ");
 
         btnGenerarReporte.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Facturación/icons8_PDF_30px.png"))); // NOI18N
         btnGenerarReporte.setText("Generar");
         btnGenerarReporte.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnGenerarReporte.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnGenerarReporteMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -164,14 +167,13 @@ public class ReportesForm extends javax.swing.JInternalFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(473, 473, 473)
                         .addComponent(btnGenerarReporte)))
-                .addContainerGap(283, Short.MAX_VALUE))
+                .addContainerGap(125, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(78, 78, 78)
+                .addGap(84, 84, 84)
                 .addComponent(jLabel1)
                 .addGap(62, 62, 62)
                 .addComponent(jLabel4)
@@ -186,26 +188,55 @@ public class ReportesForm extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAtrasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAtrasMouseClicked
-        MenuPrincipal mp = new MenuPrincipal(dp);
-        dp.removeAll();
-        dp.add(mp);
-        mp.setVisible(true);
+        MenuPrincipal mp;
+        try {
+            mp = new MenuPrincipal(dp);
+            dp.removeAll();
+            dp.add(mp);
+            mp.setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(ReportesForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }//GEN-LAST:event_btnAtrasMouseClicked
+
+    private void btnGenerarReporteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnGenerarReporteMouseClicked
+        
+        String path;
+        if(rbEmpleadoMIG.isSelected())
+        {
+           path = "src/reportes/RecaudadoEmpleados.jasper"; 
+        }else{
+            path = "src/reportes/ProductosMasVendidos.jasper"; 
+        }
+        
+        try {
+            con = new Conexion();
+            con.conectar();
+            JasperReport report = null;
+            report = (JasperReport) JRLoader.loadObjectFromFile(path);
+            JasperPrint jprint;
+            jprint = JasperFillManager.fillReport(path,null,con.getConexion());
+            JasperViewer view  = new JasperViewer(jprint,false);
+            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            view.setVisible(true);
+        } catch (JRException | SQLException ex) {
+            Logger.getLogger(ReportesForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnGenerarReporteMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAtras;
     private javax.swing.JButton btnGenerarReporte;
-    private javax.swing.JCheckBox cbComparacionMes;
-    private javax.swing.JCheckBox cbEmpleadoMasGanancias;
-    private javax.swing.JCheckBox cbEmpleadoMasVentas;
-    private javax.swing.JCheckBox cbProductoMasVendido;
-    private javax.swing.JCheckBox cbTotalRecaudado;
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JRadioButton rbEmpleadoMIG;
+    private javax.swing.JRadioButton rbProductosMasV;
     // End of variables declaration//GEN-END:variables
 }

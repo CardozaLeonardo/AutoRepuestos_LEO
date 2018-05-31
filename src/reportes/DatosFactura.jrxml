@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DatosFactura" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="34df2b9c-32f6-427e-a63d-6c27e0fef241">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="16"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\del\\Desktop\\Everything\\Autorepuestos_LEO\\src\\reportes\\"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT f.factura_ID as NumFactura,concat(c.nombres, ' ',c.apellidos) as Cliente, c.cedula as Cedula, f.fecha as fecha,concat(e.nombres, ' ',e.apellidos) as Empleado, f.total as Total FROM Factura f INNER JOIN Cliente c ON
+f.cliente_ID = c.cliente_ID INNER JOIN Empleado e ON f.empleado_ID = e.empleado_ID WHERE f.factura_ID =  (SELECT max(factura_ID) from Factura);]]>
+	</queryString>
+	<field name="NumFactura" class="java.lang.Integer"/>
+	<field name="Cliente" class="java.lang.String"/>
+	<field name="Cedula" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="fecha" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Empleado" class="java.lang.String"/>
+	<field name="Total" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="71" splitType="Stretch">
+			<staticText>
+				<reportElement x="171" y="19" width="187" height="27" uuid="1a54cbcc-0358-44ee-b514-06d3446e7dc1"/>
+				<textElement>
+					<font size="18" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Autorepuestos Leo]]></text>
+			</staticText>
+			<image>
+				<reportElement x="57" y="0" width="82" height="71" uuid="3c22de93-833c-48cf-9682-a9327543a468"/>
+				<imageExpression><![CDATA["C:\\Users\\del\\Desktop\\Everything\\Autorepuestos_LEO\\src\\images\\reports\\LogoReportes.jpg"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="201" splitType="Stretch">
+			<staticText>
+				<reportElement x="139" y="86" width="90" height="20" uuid="25c1ee01-cb48-49eb-ba92-229b50503d4e"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Factura No]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="239" y="86" width="119" height="20" uuid="99935b23-c10a-4266-ae31-f91711a6581c"/>
+				<textFieldExpression><![CDATA[$F{NumFactura}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="139" y="106" width="90" height="20" uuid="a1173986-5805-4624-8d43-1b99c6308b15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cliente]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="239" y="106" width="119" height="20" uuid="d8b9332c-5996-4021-8dd2-a085eed8158d"/>
+				<textFieldExpression><![CDATA[$F{Cliente}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="139" y="126" width="90" height="20" uuid="7a508516-6a9f-45aa-8bff-00519cc940f8"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cédula]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="239" y="126" width="119" height="20" uuid="eebaf47c-853e-4555-9538-93f336bdf571"/>
+				<textFieldExpression><![CDATA[$F{Cedula}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="139" y="146" width="90" height="20" uuid="3a837482-12bb-461d-bbc6-a4827277b04b"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="239" y="146" width="119" height="20" uuid="faeb7bb5-0237-4237-8340-629ec360fdb1"/>
+				<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="139" y="166" width="90" height="20" uuid="8444a394-2722-485d-97ef-e69d3a728ad9"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Empleado]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="239" y="166" width="119" height="20" uuid="a6f794e2-5e7d-493c-a200-f4223c98ac7c"/>
+				<textFieldExpression><![CDATA[$F{Empleado}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="150" y="0" width="218" height="20" uuid="b4ee1f1a-f7a7-4799-8e31-198ae5a7200c"/>
+				<text><![CDATA[Enitel ½c al norte, Ocotal, Nueva Segovia]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="150" y="20" width="126" height="20" uuid="68213bc7-7895-4bd5-9417-4946450d4739"/>
+				<text><![CDATA[Celular: 86511802]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="4" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="41" splitType="Stretch">
+			<subreport>
+				<reportElement x="0" y="12" width="555" height="19" uuid="edd36b5d-3f33-4ca8-a905-ed58132c0892"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{REPORT_DATA_SOURCE}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "Factura.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="2" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="30" splitType="Stretch">
+			<textField>
+				<reportElement x="196" y="10" width="80" height="20" uuid="0db19eb5-5670-4ca5-a726-09c37be96839"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="276" y="10" width="40" height="20" uuid="3e33a45b-3a51-4541-884c-ed58e77e9ac4"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="13" splitType="Stretch"/>
+	</summary>
+</jasperReport>

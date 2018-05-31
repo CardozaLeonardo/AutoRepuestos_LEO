@@ -6,6 +6,7 @@
 package vistas;
 
 import java.awt.Image;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.sql.SQLException;
@@ -79,6 +80,22 @@ public class Login2 extends javax.swing.JFrame {
         }
         
         
+    }
+    
+    public void iniciar()
+    {
+        if(autenticar())
+        {
+            try {
+                Principal p = new Principal();
+                p.setVisible(true);
+                this.dispose();
+            } catch (SQLException ex) {
+                Logger.getLogger(Login2.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "Usuario o clave incorrecta", "Datos incorrectos", JOptionPane.ERROR_MESSAGE);
+        }
     }
     /*
      * This method is called from within the constructor to initialize the form.
@@ -215,6 +232,11 @@ public class Login2 extends javax.swing.JFrame {
                 txtUsuarioFocusLost(evt);
             }
         });
+        txtUsuario.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtUsuarioKeyPressed(evt);
+            }
+        });
 
         jSeparator1.setBackground(new java.awt.Color(153, 153, 153));
         jSeparator1.setForeground(new java.awt.Color(153, 153, 153));
@@ -229,6 +251,11 @@ public class Login2 extends javax.swing.JFrame {
             }
             public void focusLost(java.awt.event.FocusEvent evt) {
                 txtClaveFocusLost(evt);
+            }
+        });
+        txtClave.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtClaveKeyPressed(evt);
             }
         });
 
@@ -355,14 +382,7 @@ public class Login2 extends javax.swing.JFrame {
 
     private void btnIngresarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnIngresarMouseClicked
         
-        if(autenticar())
-        {
-            Principal p = new Principal();
-            p.setVisible(true);
-            this.dispose();
-        }else{
-            JOptionPane.showMessageDialog(null, "Usuario o clave incorrecta", "Datos incorrectos", JOptionPane.ERROR_MESSAGE);
-        }
+        iniciar();
     }//GEN-LAST:event_btnIngresarMouseClicked
 
     private void txtUsuarioFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtUsuarioFocusGained
@@ -407,6 +427,21 @@ public class Login2 extends javax.swing.JFrame {
             txtClave.setText("Password");
         }
     }//GEN-LAST:event_txtClaveFocusLost
+
+    private void txtClaveKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtClaveKeyPressed
+        
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER)
+        {
+            iniciar();
+        }
+    }//GEN-LAST:event_txtClaveKeyPressed
+
+    private void txtUsuarioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUsuarioKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER)
+        {
+            iniciar();
+        }
+    }//GEN-LAST:event_txtUsuarioKeyPressed
 
     /**
      * @param args the command line arguments

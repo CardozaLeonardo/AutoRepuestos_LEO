@@ -15,10 +15,17 @@ import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 import jdk.nashorn.internal.runtime.regexp.joni.exception.JOniException;
 
 import modelo.*;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
 
 
 /**
@@ -32,8 +39,9 @@ public class FacturacionForm extends javax.swing.JInternalFrame {
      */
     JDesktopPane dp;
     private TFactura factura;
-    private TEmpleado empleado;
-    private TCliente cliente;
+    private boolean guardado;
+    private boolean finalizado;
+    private boolean iniciado;
     public FacturacionForm(JDesktopPane dp) throws SQLException {
         this.dp = dp;
         initComponents();
@@ -42,15 +50,21 @@ public class FacturacionForm extends javax.swing.JInternalFrame {
         cargarTablaComponentes();
         establecerFecha();
         mostrarFacturaID();
+        cargarDatosEmpleado();
+        guardado = false;
+        finalizado = false;
+        iniciado = false;
+        tablaClientes.getTableHeader().setReorderingAllowed(false);
+        tablaComponentes.getTableHeader().setReorderingAllowed(false);
     }
     
     public void establecerFecha()
     {
         //Date Fecha = new Date();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	Date date = new Date();
         String fecha[] = dateFormat.format(date).split(" ");
-        txtFecha.setText(fecha[0]);
+        txtFecha.setText(fecha[0] + " " + fecha[1]);
         //txtDate.setText(fecha[0]);
 	//System.out.println();
     }
@@ -64,6 +78,22 @@ public class FacturacionForm extends javax.swing.JInternalFrame {
     public void cargarTablaComponentes()
     {
         tablaComponentes.setModel(factura.cargarTablaCompo());
+    }
+    
+    public void calcularTotal()
+    {
+        factura.calcularTotal();
+        txtTotal.setText("" + factura.getTotal());
+    }
+    
+    public void cargarDatosEmpleado(){
+        factura.getEmpleado().cargarID();
+        txtEmpleado.setText("" + factura.getEmpleado().obtenerNombreEmpleadoIniciado());
+    }
+    
+    public void eliminarFactura(){
+        factura.eliminarTV(factura.getFactura_ID());
+        factura.eliminar(factura.getFactura_ID());
     }
         
 
@@ -91,7 +121,8 @@ public class FacturacionForm extends javax.swing.JInternalFrame {
         txtCliente = new javax.swing.JTextField();
         txtEmpleado = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tablaProductosClientes = new javax.swing.JTable();
+        tablaClientes = new javax.swing.JTable();
+        btAgregarCliente = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
@@ -187,7 +218,15 @@ public class FacturacionForm extends javax.swing.JInternalFrame {
 
         txtFecha.setEditable(false);
 
-        tablaProductosClientes.setModel(new javax.swing.table.DefaultTableModel(
+        txtCliente.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtClienteKeyPressed(evt);
+            }
+        });
+
+        txtEmpleado.setEditable(false);
+
+        tablaClientes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -198,7 +237,15 @@ public class FacturacionForm extends javax.swing.JInternalFrame {
                 "Código", "Descripción", "Precio", "Existencia", "Marca"
             }
         ));
-        jScrollPane1.setViewportView(tablaProductosClientes);
+        jScrollPane1.setViewportView(tablaClientes);
+
+        btAgregarCliente.setText("Agregar");
+        btAgregarCliente.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btAgregarCliente.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btAgregarClienteMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -220,9 +267,12 @@ public class FacturacionForm extends javax.swing.JInternalFrame {
                             .addComponent(txtCliente, javax.swing.GroupLayout.DEFAULT_SIZE, 167, Short.MAX_VALUE)
                             .addComponent(txtEmpleado)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(22, 22, 22)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 363, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(31, Short.MAX_VALUE))
+                        .addGap(20, 20, 20)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 363, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(158, 158, 158)
+                        .addComponent(btAgregarCliente)))
+                .addContainerGap(33, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -243,9 +293,11 @@ public class FacturacionForm extends javax.swing.JInternalFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(txtEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(39, 39, 39)
+                .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(67, Short.MAX_VALUE))
+                .addGap(28, 28, 28)
+                .addComponent(btAgregarCliente)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
@@ -284,14 +336,30 @@ public class FacturacionForm extends javax.swing.JInternalFrame {
 
         txtVerLista.setText("Ver lista");
         txtVerLista.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        txtVerLista.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txtVerListaMouseClicked(evt);
+            }
+        });
 
         btAnular.setText("Anular");
         btAnular.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btAnular.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btAnularMouseClicked(evt);
+            }
+        });
 
         txtGenerar.setText("Finalizar");
         txtGenerar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        txtGenerar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txtGenerarMouseClicked(evt);
+            }
+        });
 
         btAgregar.setText("Agregar");
+        btAgregar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btAgregar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btAgregarMouseClicked(evt);
@@ -364,7 +432,7 @@ public class FacturacionForm extends javax.swing.JInternalFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtCambio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel11))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btAnular)
                     .addComponent(txtGenerar)
@@ -406,10 +474,34 @@ public class FacturacionForm extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAtrasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAtrasMouseClicked
-        MenuPrincipal mp = new MenuPrincipal(dp);
-        dp.removeAll();
-        dp.add(mp);
-        mp.setVisible(true);
+        
+        if(finalizado)
+        {
+           try {
+                MenuPrincipal mp = new MenuPrincipal(dp);
+                dp.removeAll();
+                dp.add(mp);
+                mp.setVisible(true);
+            } catch (SQLException ex) {
+                Logger.getLogger(FacturacionForm.class.getName()).log(Level.SEVERE, null, ex);
+            } 
+        }else{
+            if(JOptionPane.showConfirmDialog(null, "¿Desea salir y anular la factura?") ==0 )
+            {
+                eliminarFactura();
+                
+                try {
+                    MenuPrincipal mp = new MenuPrincipal(dp);
+                    dp.removeAll();
+                    dp.add(mp);
+                    mp.setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(FacturacionForm.class.getName()).log(Level.SEVERE, null, ex);
+                } 
+            }
+            
+        }
+            
     }//GEN-LAST:event_btnAtrasMouseClicked
 
     int xx, xy;
@@ -446,9 +538,20 @@ public class FacturacionForm extends javax.swing.JInternalFrame {
                 int cant = Integer.parseInt(JOptionPane.showInputDialog("Ingrese la cantidad: "));
                 int idComponente = Integer.parseInt(tablaComponentes.getValueAt(index, 0).toString());
                 
-                if(factura.actualizarStock(cant, idComponente))
+                if(!guardado)
                 {
+                    factura.guardar(txtFecha.getText());
+                    guardado = true;
+                    iniciado = true;
+                }
+                
+                if(factura.verificarStock(cant, idComponente))
+                {
+                    
                     factura.guardarVenta(factura.getFactura_ID(),idComponente , cant);
+                    factura.actualizarStock(cant, idComponente);
+                    calcularTotal();
+                    cargarTablaComponentes();
                 }
             }catch(NumberFormatException nfe){
                 JOptionPane.showMessageDialog(null, "Ingrese un valor numérico", "Entrada inválida", JOptionPane.ERROR_MESSAGE);
@@ -456,9 +559,67 @@ public class FacturacionForm extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_btAgregarMouseClicked
 
+    private void btAgregarClienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btAgregarClienteMouseClicked
+       int index = tablaClientes.getSelectedRow();
+       
+       if(index != -1)
+       {
+           factura.getCliente().setIdCliente(Integer.parseInt(tablaClientes.getValueAt(index, 0).toString()));
+           txtCliente.setText(tablaClientes.getValueAt(index, 1).toString() +" " +  tablaClientes.getValueAt(index, 2).toString());
+       }
+    }//GEN-LAST:event_btAgregarClienteMouseClicked
+
+    private void txtClienteKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtClienteKeyPressed
+        String query = "SELECT cliente_ID, nombres, apellidos, cedula, sexo FROM Cliente Where nombres LIKE '" + txtCliente.getText() + "%'";
+        tablaClientes.setModel(factura.getCliente().cargarTabla(query));
+    }//GEN-LAST:event_txtClienteKeyPressed
+
+    private void txtGenerarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtGenerarMouseClicked
+        if(iniciado)
+        {
+            factura.actualizar(txtFecha.getText());
+            finalizado = true;
+            String path = "src/reportes/DatosFactura.jasper";
+
+            try {
+                Conexion con = new Conexion();
+                con.conectar();
+                JasperReport report = null;
+                report = (JasperReport) JRLoader.loadObjectFromFile(path);
+                JasperPrint jprint;
+                jprint = JasperFillManager.fillReport(path,null,con.getConexion());
+                JasperViewer view  = new JasperViewer(jprint,false);
+                view.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+                view.setVisible(true);
+            } catch (JRException | SQLException ex) {
+                Logger.getLogger(ReportesForm.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_txtGenerarMouseClicked
+
+    private void btAnularMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btAnularMouseClicked
+        if(JOptionPane.showConfirmDialog(null, "¿Desea anular esta factura?") == 0 && factura.getTotal() !=0)
+        {
+            eliminarFactura();
+        }
+    }//GEN-LAST:event_btAnularMouseClicked
+
+    private void txtVerListaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtVerListaMouseClicked
+        if(factura.getTotal() != 0)
+        {
+            try {
+                VentasForm vf = new VentasForm(factura.getFactura_ID(),true,(JFrame) SwingUtilities.getWindowAncestor(this));
+                vf.setVisible(true);
+            } catch (SQLException ex) {
+                Logger.getLogger(FacturacionForm.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_txtVerListaMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btAgregar;
+    private javax.swing.JButton btAgregarCliente;
     private javax.swing.JButton btAnular;
     private javax.swing.JButton btnAtras;
     private javax.swing.ButtonGroup buttonGroup1;
@@ -478,8 +639,8 @@ public class FacturacionForm extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable tablaClientes;
     private javax.swing.JTable tablaComponentes;
-    private javax.swing.JTable tablaProductosClientes;
     private javax.swing.JTextField txtBuscar;
     private javax.swing.JTextField txtCambio;
     private javax.swing.JTextField txtCantPago;

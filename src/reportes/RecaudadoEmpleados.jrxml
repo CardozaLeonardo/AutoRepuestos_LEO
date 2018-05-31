@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RecaudadoEmpleados" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ab9becb2-5d16-41b7-8462-4181ac9e24c7">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\del\\Desktop\\Everything\\Autorepuestos_LEO\\src\\reportes\\"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT e.nombres, e.apellidos, e.cedula, sum(f.total) as Total FROM Empleado e INNER JOIN
+Factura f ON f.empleado_ID = e.empleado_ID group by e.nombres,e.apellidos,e.cedula ORDER BY Total desc;]]>
+	</queryString>
+	<field name="nombres" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="apellidos" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="cedula" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Total" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="64" splitType="Stretch">
+			<staticText>
+				<reportElement x="207" y="20" width="152" height="20" uuid="4df5ef22-e699-47ac-b413-f99c7b49fb46"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Autorepuestos Leo]]></text>
+			</staticText>
+			<image>
+				<reportElement x="59" y="0" width="90" height="64" uuid="484242bc-1c57-4e28-9832-551100f69e4d"/>
+				<imageExpression><![CDATA["C:\\Users\\del\\Desktop\\Everything\\Autorepuestos_LEO\\src\\images\\reports\\LogoReportes.jpg"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="51" splitType="Stretch">
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="231" y="0" width="100" height="20" uuid="f19789d6-015c-454a-8233-979ab8ad36eb"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="207" y="20" width="157" height="20" uuid="089e45cd-230e-4837-999b-c416646523c9"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total recaudado por empleado]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="46" splitType="Stretch">
+			<staticText>
+				<reportElement x="49" y="22" width="100" height="20" uuid="21fdfd85-0816-4948-adcb-7f945709341f"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nombre]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="177" y="22" width="100" height="20" uuid="f6fe3c22-05d9-45af-9bb0-08c821adb5b7"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Apellido]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="301" y="22" width="100" height="20" uuid="071fbbeb-6fa8-4a12-b494-a36313bd0fa0"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cédula]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="434" y="22" width="100" height="20" uuid="575eb3b4-9d3b-4446-8ce4-4d6bc1420410"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Recaudado C$]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="45" splitType="Stretch">
+			<textField>
+				<reportElement x="49" y="15" width="100" height="20" uuid="3ff46248-e825-478d-a0c3-589e133a0ab1"/>
+				<textFieldExpression><![CDATA[$F{nombres}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="177" y="15" width="100" height="20" uuid="9a5285da-39d4-49db-b376-aa6bcbbf1fb8"/>
+				<textFieldExpression><![CDATA[$F{apellidos}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="301" y="15" width="100" height="20" uuid="291e1b0e-6b2b-4c15-a8d0-e759d8c16c3f"/>
+				<textFieldExpression><![CDATA[$F{cedula}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="434" y="15" width="100" height="20" uuid="ec28db64-f522-4e85-b38a-a0832ced2aa7"/>
+				<textFieldExpression><![CDATA[$F{Total}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="36" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="35" splitType="Stretch">
+			<staticText>
+				<reportElement x="241" y="0" width="160" height="20" uuid="3f8fb617-9a8c-49bb-a611-b9e7e69e811f"/>
+				<text><![CDATA[Leonardo Cardoza Orozco 2018]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="6" splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -19,6 +19,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
+import modelo.TEmpleado;
 import sun.applet.Main;
 
 /**
@@ -31,11 +32,13 @@ public class MenuPrincipal extends javax.swing.JInternalFrame {
      * Creates new form menuPrincipal
      */
     JDesktopPane dp;
-    
-    public MenuPrincipal(JDesktopPane dp) {
+    private TEmpleado te;
+    public MenuPrincipal(JDesktopPane dp) throws SQLException {
         this.dp = dp;
+        te = new TEmpleado();
         initComponents();
         mostrarImagen();
+        mostrarNombreEmpleado();
         ((BasicInternalFrameUI) this.getUI()).setNorthPane(null);
     }
     
@@ -62,6 +65,11 @@ public class MenuPrincipal extends javax.swing.JInternalFrame {
         
         
     }
+    
+    public void mostrarNombreEmpleado()
+    {
+        nombreEmpleado.setText("Bienvenido " + te.obtenerNombreEmpleadoIniciado());
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -76,6 +84,7 @@ public class MenuPrincipal extends javax.swing.JInternalFrame {
         leonLabel = new javax.swing.JLabel();
         btnSalir = new javax.swing.JButton();
         btnminimizar = new javax.swing.JButton();
+        nombreEmpleado = new javax.swing.JLabel();
         panelClientes = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -137,6 +146,10 @@ public class MenuPrincipal extends javax.swing.JInternalFrame {
             }
         });
 
+        nombreEmpleado.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        nombreEmpleado.setForeground(new java.awt.Color(255, 255, 255));
+        nombreEmpleado.setText("jLabel13");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -144,11 +157,17 @@ public class MenuPrincipal extends javax.swing.JInternalFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(46, 46, 46)
                 .addComponent(leonLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 836, Short.MAX_VALUE)
-                .addComponent(btnminimizar)
-                .addGap(18, 18, 18)
-                .addComponent(btnSalir)
-                .addGap(30, 30, 30))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 836, Short.MAX_VALUE)
+                        .addComponent(btnminimizar)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnSalir)
+                        .addGap(30, 30, 30))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(241, 241, 241)
+                        .addComponent(nombreEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -161,7 +180,9 @@ public class MenuPrincipal extends javax.swing.JInternalFrame {
                         .addContainerGap()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(btnminimizar)
-                            .addComponent(btnSalir))))
+                            .addComponent(btnSalir))
+                        .addGap(31, 31, 31)
+                        .addComponent(nombreEmpleado)))
                 .addContainerGap(20, Short.MAX_VALUE))
         );
 
@@ -635,6 +656,7 @@ public class MenuPrincipal extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel leonLabel;
+    private javax.swing.JLabel nombreEmpleado;
     private javax.swing.JPanel panelClientes;
     private javax.swing.JPanel panelCuentas;
     private javax.swing.JPanel panelEmpleados;

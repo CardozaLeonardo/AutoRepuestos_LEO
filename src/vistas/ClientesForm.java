@@ -7,6 +7,8 @@ package vistas;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JDesktopPane;
 import javax.swing.JOptionPane;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
@@ -427,10 +429,14 @@ public class ClientesForm extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAtrasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAtrasMouseClicked
-        MenuPrincipal mp = new MenuPrincipal(dp);
-        dp.removeAll();
-        dp.add(mp);
-        mp.setVisible(true);
+        try {
+            MenuPrincipal mp = new MenuPrincipal(dp);
+            dp.removeAll();
+            dp.add(mp);
+            mp.setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(ClientesForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnAtrasMouseClicked
 
     private void btnEditarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarClienteActionPerformed

@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Factura" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="db88c09a-9cc8-40ea-86f2-a3274a6ce389">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="dataset1" uuid="7569b18a-4743-4e0c-ae42-de0bceab0e51">
+		<queryString>
+			<![CDATA[SELECT f.factura_ID as NumFactura,concat(c.nombres, ' ',c.apellidos) as Cliente, c.cedula as Cedula, cast(f.fecha as Date) as fecha,
+cast(f.fecha as time) as Hora,concat(e.nombres, ' ',e.apellidos) as Empleado, f.total as Total FROM Factura f INNER JOIN Cliente c ON
+f.cliente_ID = c.cliente_ID INNER JOIN Empleado e ON f.empleado_ID = e.empleado_ID WHERE f.factura_ID =  (SELECT max(factura_ID) from Factura);]]>
+		</queryString>
+		<field name="NumFactura" class="java.lang.Integer"/>
+		<field name="Cliente" class="java.lang.String"/>
+		<field name="Cedula" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="fecha" class="java.sql.Date">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="Hora" class="java.sql.Time"/>
+		<field name="Empleado" class="java.lang.String"/>
+		<field name="Total" class="java.math.BigDecimal">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+	</subDataset>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\del\\Desktop\\Everything\\Autorepuestos_LEO\\src\\reportes\\"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT f.total,c.descripcion, c.precioUnitario, v.cantidad, (v.cantidad * c.precioUnitario) as Subtotal
+FROM Factura f INNER JOIN Venta v ON f.factura_ID = v.factura_ID INNER JOIN Componente c ON c.componente_ID = v.componente_ID WHERE f.factura_ID = 
+(SELECT max(factura_ID) from Factura);]]>
+	</queryString>
+	<field name="total" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="descripcion" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="precioUnitario" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="cantidad" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Subtotal" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="3" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="23" splitType="Stretch">
+			<staticText>
+				<reportElement x="11" y="0" width="100" height="20" uuid="43f30cb9-3896-4267-9d84-bda087402736"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Items]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="132" y="0" width="100" height="20" uuid="912c0b08-9df9-4ac8-9573-d6686b198503"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Descripción]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="250" y="0" width="100" height="20" uuid="722445ef-2b2b-4ebd-b5b3-b05d1de900fa"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Precio Unitario]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="373" y="0" width="100" height="20" uuid="78fe18b7-1b6c-4eed-bfae-456d7c654850"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Subtotal]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="46" splitType="Stretch">
+			<textField>
+				<reportElement x="11" y="16" width="100" height="20" uuid="9c09a3e6-57fd-42d1-ade1-38a3b0b2dcf1"/>
+				<textFieldExpression><![CDATA[$F{cantidad}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="132" y="16" width="100" height="20" uuid="c9540bed-b0be-423c-8cca-f165429f74ef"/>
+				<textFieldExpression><![CDATA[$F{descripcion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="250" y="16" width="100" height="20" uuid="2ff9b672-544e-419d-b964-ab0c65e40eef"/>
+				<textFieldExpression><![CDATA[$F{precioUnitario}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="373" y="16" width="100" height="20" uuid="92ddce8e-18a8-4f0c-a807-f8c0c932b717"/>
+				<textFieldExpression><![CDATA[$F{Subtotal}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="41" splitType="Stretch">
+			<staticText>
+				<reportElement x="261" y="21" width="100" height="20" uuid="04031968-0043-4db5-8839-399716d19f27"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[ Total C$]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="373" y="21" width="100" height="20" uuid="e4ca03ef-5be5-4573-ab71-fb78afae48e5"/>
+				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="11" y="12" width="462" height="1" backcolor="#000000" uuid="51829d7b-e167-4d92-9f58-68a37f74901a"/>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="15" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="15" splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ProductosMasVendidos" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0c10c8cc-c104-44a9-a0a2-525a346c91e9">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[SELECT c.descripcion, c.precioUnitario, f.nombre as fabricante, sum(v.cantidad) as Unidades FROM
+Componente c INNER JOIN Venta v ON c.componente_ID = v.componente_ID INNER JOIN Fabricante f
+ON c.fabricante_ID = f.fabricante_ID Group By
+c.descripcion, c.precioUnitario, f.nombre ORDER BY Unidades desc limit 10;]]>
+	</queryString>
+	<field name="descripcion" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="precioUnitario" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="fabricante" class="java.lang.String"/>
+	<field name="Unidades" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="233" y="31" width="143" height="20" uuid="72f355c4-73a2-4d87-b248-984fb5fb67e0"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Autorepuestos Leo]]></text>
+			</staticText>
+			<image>
+				<reportElement x="77" y="0" width="82" height="79" uuid="e179c996-0bb5-4914-b5b7-8330fb54f186"/>
+				<imageExpression><![CDATA["C:\\Users\\del\\Desktop\\Everything\\Autorepuestos_LEO\\src\\images\\reports\\LogoReportes.jpg"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="47" splitType="Stretch">
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="233" y="0" width="121" height="20" uuid="04f665f9-6b72-44bc-a3f3-b8429f3b3744"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="233" y="20" width="143" height="20" uuid="d9943f0d-9a49-49c8-a874-7c0d0b5e776c"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Productos más vendidos]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="45" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="20" width="100" height="20" uuid="e25d338a-e14d-472a-bda2-95c64bb620b9"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Descripción]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="116" y="20" width="100" height="20" uuid="97f444cb-f27e-44ff-9fcc-d4d00c38a2bf"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Precio Unitario C$]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="233" y="20" width="100" height="20" uuid="b473540d-d87f-44a1-8e43-b685ae55d072"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fabricante]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="354" y="20" width="100" height="20" uuid="e450f914-1532-4900-b892-a17559e04adb"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Unidades Vendidas]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="43" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="14" width="100" height="20" uuid="5ad65e4b-f7a3-45b5-a34d-8a42093af5ea"/>
+				<textFieldExpression><![CDATA[$F{descripcion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="116" y="14" width="100" height="20" uuid="cf0b77b7-7916-4b5e-99cb-1ec4f68411fe"/>
+				<textFieldExpression><![CDATA[$F{precioUnitario}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="233" y="14" width="100" height="20" uuid="c25c6cb7-0a48-4fd4-9d93-70cf9d440417"/>
+				<textFieldExpression><![CDATA[$F{fabricante}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="354" y="14" width="100" height="20" uuid="4711cafb-b799-49e5-a444-c085d0dc1892"/>
+				<textFieldExpression><![CDATA[$F{Unidades}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<staticText>
+				<reportElement x="200" y="34" width="154" height="20" uuid="2d9f4830-7c41-4851-b7cf-ff8bb85256a1"/>
+				<text><![CDATA[Leonardo Cardoza Orozco 2018]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

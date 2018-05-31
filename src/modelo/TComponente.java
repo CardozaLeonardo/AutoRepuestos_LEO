@@ -136,6 +136,7 @@ public class TComponente
                 
                 if(stock < cant)
                 {
+                    JOptionPane.showMessageDialog(null, "No se cuenta con suficente Stock", "Stock insuficiente", JOptionPane.WARNING_MESSAGE);
                     return false;
                 }
             }
@@ -253,20 +254,18 @@ public class TComponente
    
   public boolean actualizarStock(int cant, int id)
   {
-       
-      if(verificarStock(cant, id)){
-        try {
-             st = this.miConex.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-             rs = st.executeQuery("Update Componente set stock += " + cant + " where componente_ID = " + id);
-             rs.next();
-         } catch (SQLException ex) {
+      
+    try {
 
-         } 
-        
-      }else{
-          JOptionPane.showMessageDialog(null, "No se cuenta con suficente Stock", "Stock insuficiente", JOptionPane.WARNING_MESSAGE);
+        PreparedStatement sp;
+        sp = this.miConex.prepareStatement("Update Componente set stock = stock -? where componente_ID =?");
+        sp.setInt(1,cant);
+        sp.setInt(2,id);
+        sp.execute();
+     } catch (SQLException ex) {
           return false;
-      }
+     } 
+      
      
       return true;
   }

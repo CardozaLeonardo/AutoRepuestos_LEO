@@ -46,14 +46,38 @@ public class TFactura {
         //this.actualizarEstado();
     }
     
-   public void guardar(String fecha, int empleadoID, int clienteID, float total){
+   public void guardar(String fecha){
         PreparedStatement sp;
         try {
-            sp = this.miConex.prepareStatement("Insert Into Factura(fecha, empleado_ID,cliente_ID, total) values (?,?,?,?)");
+            sp = this.miConex.prepareStatement("Insert Into Factura(fecha, empleado_ID,cliente_ID, total) values (cast(? as Datetime),?,?,?)");
             sp.setString(1,fecha);
-            sp.setInt(2,empleadoID);
-            sp.setInt(3,clienteID);
-            sp.setFloat(4,total);
+            sp.setInt(2,empleado.getEmpleadoID());
+            sp.setInt(3,cliente.getIdCliente());
+            sp.setFloat(4,this.total);
+            sp.execute();
+            JOptionPane.showMessageDialog(null,
+                        "¡Factura registrada existosamente!",
+                        "Nuevo Registro",
+                        JOptionPane.INFORMATION_MESSAGE);
+            /*this.actualizar();
+            rs.last();
+            this.actualizarEstado();*/
+        } catch (SQLException ex) {
+            Logger.getLogger(TFactura.class.getName()).log(Level.SEVERE, null, ex);
+            /*JOptionPane.showMessageDialog(null,
+                        "¡Ingrese adecuadamente los datos!","Error al guardar",JOptionPane.ERROR_MESSAGE);*/
+        }
+    }
+   
+   public void actualizar(String fecha){
+        PreparedStatement sp;
+        try {
+            sp = this.miConex.prepareStatement("UPDATE Factura SET fecha = cast(? as Datetime), empleado_ID = ?, total = ?, cliente_ID =? WHERE factura_ID =?");
+            sp.setString(1,fecha);
+            sp.setInt(2,empleado.getEmpleadoID());
+            sp.setFloat(3,this.total);
+            sp.setInt(4,cliente.getIdCliente());
+            sp.setInt(5, factura_ID);
             sp.execute();
             JOptionPane.showMessageDialog(null,
                         "¡Factura registrada existosamente!",
@@ -214,4 +238,42 @@ public class TFactura {
         } 
      
   }
+   
+   public void calcularTotal()
+   {
+       try {
+            st = this.miConex.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            rs = st.executeQuery("SELECT sum(v.cantidad * c.precioUnitario) as Total FROM Venta v INNER JOIN " +
+            "Componente c ON v.componente_ID = c.componente_ID WHERE v.factura_ID =" + factura_ID);
+            rs.next();
+            
+            total = rs.getFloat("Total");
+            
+        } catch (SQLException ex) {
+            //Logger.getLogger(TCategoriaComponente.class.getName()).log(Level.SEVERE, null, ex);
+        }
+   }
+   
+   public boolean verificarStock(int cant, int id)
+    {
+        return ventas.verificarStock(cant, id);
+    }
+
+    public TEmpleado getEmpleado() {
+        return empleado;
+    }
+
+    public void setEmpleado(TEmpleado empleado) {
+        this.empleado = empleado;
+    }
+
+    public TCliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(TCliente cliente) {
+        this.cliente = cliente;
+    }
+   
+   
 }
